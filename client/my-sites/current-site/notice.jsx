@@ -8,6 +8,7 @@ import url from 'url';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { localize } from 'i18n-calypso';
+import config from 'config';
 
 /**
  * Internal dependencies
@@ -30,6 +31,7 @@ import {
 } from 'state/plugins/premium/selectors';
 import TrackComponentView from 'lib/analytics/track-component-view';
 import DomainToPaidPlanNotice from './domain-to-paid-plan-notice';
+import { hasPendingPayment } from 'lib/cart-values';
 
 class SiteNotice extends React.Component {
 	static propTypes = {
@@ -138,6 +140,29 @@ class SiteNotice extends React.Component {
 		);
 	}
 
+	pendingPaymentNotice() {
+		if ( ! config.isEnabled( 'pending-payments' ) ) {
+			return null;
+		}
+
+		if ( ! this.props.hasPendingCart ) {
+			return null;
+		}
+
+		const { translate } = this.props;
+
+		return (
+			<Notice
+				icon="info-outline"
+				isCompact
+				status="is-warning"
+				text={ translate( 'Pending payment' ) }
+			>
+				<NoticeAction href="/me/purchases/pending">{ translate( 'Complete' ) }</NoticeAction>
+			</Notice>
+		);
+	}
+
 	promotionEndsToday( { endsAt } ) {
 		const now = new Date();
 		const format = 'YYYYMMDD';
@@ -181,6 +206,7 @@ class SiteNotice extends React.Component {
 				{ this.activeDiscountNotice() || this.freeToPaidPlanNotice() || <DomainToPaidPlanNotice /> }
 				{ this.getSiteRedirectNotice( site ) }
 				<QuerySitePlans siteId={ site.ID } />
+				{ this.pendingPaymentNotice() }
 				{ this.domainCreditNotice() }
 				{ this.jetpackPluginsSetupNotice() }
 			</div>
@@ -199,6 +225,7 @@ export default connect(
 			canManageOptions: canCurrentUser( state, siteId, 'manage_options' ),
 			pausedJetpackPluginsSetup:
 				isJetpackPluginsStarted( state, siteId ) && ! isJetpackPluginsFinished( state, siteId ),
+			hasPendingPayment: hasPendingPayment( state.cart ), //tofix
 		};
 	},
 	dispatch => {
