@@ -246,7 +246,9 @@ function paymentMethodName( method ) {
 		paypal: 'PayPal',
 		p24: 'Przelewy24',
 		'brazil-tef': 'Transferência bancária',
-		'wechat': i18n.translate( 'WeChat Pay', { comment: 'Name for WeChat Pay - https://pay.weixin.qq.com/' } ),
+		wechat: i18n.translate( 'WeChat Pay', {
+			comment: 'Name for WeChat Pay - https://pay.weixin.qq.com/',
+		} ),
 	};
 
 	// Temporarily override 'credit or debit' with just 'credit' for india
