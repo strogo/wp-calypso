@@ -5,14 +5,14 @@
 import React, { Component } from 'react';
 import { localize } from 'i18n-calypso';
 import { connect } from 'react-redux';
-import { get } from 'lodash';
 
 /**
  * Internal dependencies
  */
 import StepWrapper from 'signup/step-wrapper';
 import SignupActions from 'lib/signup/actions';
-import { isUserLoggedIn } from 'state/current-user/selectors';
+import { setSiteType } from 'state/signup/steps/site-type/actions';
+import { getSiteType } from 'state/signup/steps/site-type/selectors';
 
 //Form components
 import Card from 'components/card';
@@ -25,17 +25,25 @@ class SiteType extends Component {
 	constructor( props ) {
 		super( props );
 		this.state = {
-			checkedRadio: get( this.props, 'signupProgress[0].providedDependencies.siteType', '' ),
+			siteType: this.props.siteType,
 		};
 	}
 
 	handleRadioChange = event => {
-		this.setState( { checkedRadio: event.currentTarget.value } );
+		this.setState( { siteType: event.currentTarget.value } );
 	};
 
 	handleSubmit = event => {
 		event.preventDefault();
 		const { goToNextStep, stepName, translate, flowName } = this.props;
+
+		//Defaults
+		let siteTypeValue = 'blogger';
+
+		const siteTypeInput = this.state.siteType;
+
+		siteTypeValue = siteTypeInput;
+		this.props.setSiteType( siteTypeValue );
 
 		//Create site
 		SignupActions.submitSignupStep(
@@ -45,7 +53,7 @@ class SiteType extends Component {
 			},
 			[],
 			{
-				siteType: this.state.checkedRadio,
+				siteType: siteTypeValue,
 			}
 		);
 
@@ -65,7 +73,7 @@ class SiteType extends Component {
 								<FormLabel className="site-type__option">
 									<FormRadio
 										value="blogger"
-										checked={ 'blogger' === this.state.checkedRadio }
+										checked={ 'blogger' === this.state.siteType }
 										onChange={ this.handleRadioChange }
 									/>
 									<span>
@@ -77,7 +85,7 @@ class SiteType extends Component {
 								<FormLabel className="site-type__option">
 									<FormRadio
 										value="business"
-										checked={ 'business' === this.state.checkedRadio }
+										checked={ 'business' === this.state.siteType }
 										onChange={ this.handleRadioChange }
 									/>
 									<span>
@@ -89,7 +97,7 @@ class SiteType extends Component {
 								<FormLabel className="site-type__option">
 									<FormRadio
 										value="professional"
-										checked={ 'professional' === this.state.checkedRadio }
+										checked={ 'professional' === this.state.siteType }
 										onChange={ this.handleRadioChange }
 									/>
 									<span>
@@ -101,7 +109,7 @@ class SiteType extends Component {
 								<FormLabel className="site-type__option">
 									<FormRadio
 										value="educator"
-										checked={ 'educator' === this.state.checkedRadio }
+										checked={ 'educator' === this.state.siteType }
 										onChange={ this.handleRadioChange }
 									/>
 									<span>
@@ -113,7 +121,7 @@ class SiteType extends Component {
 								<FormLabel className="site-type__option">
 									<FormRadio
 										value="non-profit"
-										checked={ 'non-profit' === this.state.checkedRadio }
+										checked={ 'non-profit' === this.state.siteType }
 										onChange={ this.handleRadioChange }
 									/>
 									<span>
@@ -161,7 +169,9 @@ class SiteType extends Component {
 
 export default connect(
 	state => ( {
-		isLoggedIn: isUserLoggedIn( state ),
+		siteType: getSiteType( state ),
 	} ),
-	{}
+	{
+		setSiteType,
+	}
 )( localize( SiteType ) );
