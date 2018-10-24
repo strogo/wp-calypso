@@ -356,6 +356,12 @@ export function generateSteps( {
 			stepName: 'reader-landing',
 			providesDependencies: [],
 		},
+
+		/* Imporved Onboarding */
+		'site-type': {
+			stepName: 'site-type',
+			providesDependencies: [ 'siteType' ],
+		},
 	};
 }
 
