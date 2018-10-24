@@ -138,15 +138,20 @@ class SiteType extends Component {
 	render() {
 		const { flowName, positionInFlow, signupProgress, stepName, translate } = this.props;
 
+		const headerText = translate( 'What type of website do you need?' );
+		const subHeaderText = translate(
+			'WordPress can do it all, but you probably have something more specific in mind.'
+		);
+
 		return (
 			<StepWrapper
 				flowName={ flowName }
 				stepName={ stepName }
 				positionInFlow={ positionInFlow }
-				headerText={ translate( 'What type of website do you need?' ) }
-				subHeaderText={ translate(
-					'WordPress can do it all, but you probably have something more specific in mind.'
-				) }
+				headerText={ headerText }
+				fallbackHeaderText={ headerText }
+				subHeaderText={ subHeaderText }
+				fallbackSubHeaderText={ subHeaderText }
 				signupProgress={ signupProgress }
 				stepContent={ this.renderContent() }
 			/>
