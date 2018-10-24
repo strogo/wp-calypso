@@ -56,7 +56,8 @@ $gutenberg-theme-toggle: #11a0d2;
 		top: 0;
 	}
 
-	.editor-inserter__menu .editor-inserter__search {
+	.editor-inserter__menu .editor-inserter__search,
+	.edit-post-post-visibility__dialog .editor-post-visibility__dialog-password-input {
 		width: auto;
 	}
 
@@ -165,4 +166,17 @@ $gutenberg-theme-toggle: #11a0d2;
 		appearance: menulist-button;
 	}
 	// END Unset Calypso default styles
+
+	input[type='radio'] {
+		// Missing Core styles
+		padding: 0 !important;
+
+		&:checked {
+			&::before {
+				// Missing Core styles
+				height: 6px;
+				width: 6px;
+			}
+		}
+	}
 }
