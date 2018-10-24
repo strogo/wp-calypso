@@ -167,16 +167,22 @@ $gutenberg-theme-toggle: #11a0d2;
 	}
 	// END Unset Calypso default styles
 
+	// MISSING CORE STYLES (TODO: Remove them once Gutenberg include the Core styles)
 	input[type='radio'] {
-		// Missing Core styles
-		padding: 0 !important;
+		padding: 0;
+		float: none;
 
 		&:checked {
 			&::before {
-				// Missing Core styles
 				height: 6px;
 				width: 6px;
 			}
 		}
 	}
+
+	label {
+		vertical-align: middle;
+		cursor: pointer;
+	}
+	// END Missing Core styles
 }
