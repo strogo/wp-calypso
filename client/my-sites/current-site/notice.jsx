@@ -141,7 +141,7 @@ class SiteNotice extends React.Component {
 	}
 
 	pendingPaymentNotice() {
-		if ( ! config.isEnabled( 'pending-payments' ) ) {
+		if ( ! config.isEnabled( 'async-payments' ) ) {
 			return null;
 		}
 
