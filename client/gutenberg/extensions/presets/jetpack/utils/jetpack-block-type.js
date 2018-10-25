@@ -14,6 +14,7 @@ export default class JetpackBlockType {
 		this.name = name;
 		this.config = config;
 		this.requiredModules = null;
+		// TODO: how do we access Jetpack Data from calypso?
 		this.jetpackData = get(
 			'object' === typeof window ? window : null,
 			JETPACK_DATA_PATH,
@@ -33,7 +34,7 @@ export default class JetpackBlockType {
 	};
 
 	register() {
-		if ( this.requiredModules && ! this.hasRequiredModules() ) {
+		if ( this.jetpackData && this.requiredModules && ! this.hasRequiredModules() ) {
 			return this;
 		}
 
