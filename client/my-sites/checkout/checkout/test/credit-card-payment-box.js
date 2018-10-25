@@ -16,6 +16,7 @@ import React from 'react';
 import { CreditCardPaymentBox } from '../credit-card-payment-box';
 import { INPUT_VALIDATION } from 'lib/store-transactions/step-types';
 import {
+	PLAN_BUSINESS_MONTHLY,
 	PLAN_BUSINESS,
 	PLAN_BUSINESS_2_YEARS,
 	PLAN_PREMIUM,
@@ -154,7 +155,7 @@ describe( 'Credit Card Payment Box - PaymentChatButton', () => {
 		translate: identity,
 	};
 
-	const businessPlans = [ PLAN_BUSINESS, PLAN_BUSINESS_2_YEARS ];
+	const businessPlans = [ PLAN_BUSINESS_MONTHLY, PLAN_BUSINESS, PLAN_BUSINESS_2_YEARS ];
 
 	businessPlans.forEach( product_slug => {
 		test( 'should render PaymentChatButton if any WP.com business plan is in the cart', () => {
