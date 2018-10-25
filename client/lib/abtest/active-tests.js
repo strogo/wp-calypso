@@ -88,15 +88,6 @@ export default {
 		},
 		defaultVariation: 'control',
 	},
-	dotBlogSuggestionsv2: {
-		datestamp: '20181012',
-		variations: {
-			simple: 50,
-			complex: 50,
-		},
-		defaultVariation: 'simple',
-		allowExistingUsers: true,
-	},
 	krackenRebootM327V2: {
 		datestamp: '20181018',
 		variations: {
@@ -108,5 +99,13 @@ export default {
 		defaultVariation: 'domainsbot_front',
 		assignmentMethod: 'userId',
 		allowExistingUsers: true,
+	},
+	skipDomainOrSiteStep: {
+		datestamp: '20181025',
+		variations: {
+			yes: 50,
+			no: 50,
+		},
+		defaultVariation: 'yes',
 	},
 };
