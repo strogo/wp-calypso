@@ -3,7 +3,7 @@
  * External dependencies
  */
 import React, { Component } from 'react';
-import { localize } from 'i18n-calypso';
+import i18n, { localize } from 'i18n-calypso';
 import { connect } from 'react-redux';
 
 /**
@@ -25,39 +25,16 @@ class SiteType extends Component {
 	constructor( props ) {
 		super( props );
 		this.state = {
-			siteType: this.props.siteType,
+			siteType: props.siteType,
 		};
 	}
 
-	handleRadioChange = event => {
-		this.setState( { siteType: event.currentTarget.value } );
-	};
+	handleRadioChange = event => this.setState( { siteType: event.currentTarget.value } );
 
 	handleSubmit = event => {
 		event.preventDefault();
-		const { goToNextStep, stepName, translate, flowName } = this.props;
-
-		//Defaults
-		let siteTypeValue = 'blogger';
-
-		const siteTypeInput = this.state.siteType;
-
-		siteTypeValue = siteTypeInput;
-		this.props.setSiteType( siteTypeValue );
-
-		//Create site
-		SignupActions.submitSignupStep(
-			{
-				processingMessage: translate( 'Collecting your information' ),
-				stepName: stepName,
-			},
-			[],
-			{
-				siteType: siteTypeValue,
-			}
-		);
-
-		goToNextStep( flowName );
+		// Default siteType is 'blogger'
+		this.props.submitStep( this.state.siteType || 'blogger' );
 	};
 
 	renderContent() {
@@ -171,7 +148,21 @@ export default connect(
 	state => ( {
 		siteType: getSiteType( state ),
 	} ),
-	{
-		setSiteType,
-	}
+	( dispatch, ownProps ) => ( {
+		submitStep: siteTypeValue => {
+			dispatch( setSiteType( siteTypeValue ) );
+			// Create site
+			SignupActions.submitSignupStep(
+				{
+					processingMessage: i18n.translate( 'Collecting your information' ),
+					stepName: ownProps.stepName,
+				},
+				[],
+				{
+					siteType: siteTypeValue,
+				}
+			);
+			ownProps.goToNextStep( ownProps.flowName );
+		},
+	} )
 )( localize( SiteType ) );
