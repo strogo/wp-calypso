@@ -172,7 +172,6 @@ $gutenberg-theme-toggle: #11a0d2;
 	// MISSING CORE STYLES (TODO: Remove them once Gutenberg include the Core styles)
 	input[type='radio'] {
 		padding: 0 !important;
-		float: none;
 
 		&:checked {
 			&::before {
