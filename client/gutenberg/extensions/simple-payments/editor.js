@@ -28,18 +28,21 @@ registerBlockType( 'jetpack/simple-payments', {
 	keywords: [ __( 'simple payments', 'jetpack' ), __( 'PayPal', 'jetpack' ) ],
 
 	attributes: {
-		paymentId: {
-			type: 'number',
-		},
-		title: {
+		description: {
 			type: 'string',
 			default: '',
 		},
-		price: {
-			type: 'number',
+		email: {
+			type: 'string',
 			default: '',
 		},
-		email: {
+		paymentId: {
+			type: 'number',
+		},
+		price: {
+			type: 'number',
+		},
+		title: {
 			type: 'string',
 			default: '',
 		},
@@ -66,7 +69,7 @@ registerBlockType( 'jetpack/simple-payments', {
 					},
 				},
 			},
-		]
+		],
 	},
 
 	edit,
