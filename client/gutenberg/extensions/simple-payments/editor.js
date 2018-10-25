@@ -25,7 +25,7 @@ registerBlockType( 'jetpack/simple-payments', {
 
 	category: 'jetpack',
 
-	keywords: [ 'simple payments', 'PayPal' ],
+	keywords: [ __( 'simple payments', 'jetpack' ), __( 'PayPal', 'jetpack' ) ],
 
 	attributes: {
 		paymentId: {
