@@ -18,6 +18,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { Component } from '@wordpress/element';
+import { Dashicon } from '@wordpress/components';
 
 class PublicizeSettingsButton extends Component {
 	/**
@@ -45,10 +46,7 @@ class PublicizeSettingsButton extends Component {
 	render() {
 		return (
 			<div className="jetpack-publicize-add-connection-container">
-				<span
-					className="jetpack-publicize-add-icon dashicons-plus-alt"
-				>
-				</span>
+				<Dashicon icon="plus-alt" className="jetpack-publicize-add-icon" size={ 24 } />
 				<a
 					onClick={ this.settingsClick }
 					tabIndex="0"
