@@ -5,14 +5,12 @@
 import React, { Component } from 'react';
 import i18n, { localize } from 'i18n-calypso';
 import { connect } from 'react-redux';
-import { noop } from 'lodash';
 
 /**
  * Internal dependencies
  */
 import StepWrapper from 'signup/step-wrapper';
 import SignupActions from 'lib/signup/actions';
-import formState from 'lib/form-state';
 import { setSiteType } from 'state/signup/steps/site-type/actions';
 import { getSiteType } from 'state/signup/steps/site-type/selectors';
 
@@ -26,53 +24,21 @@ import FormRadio from 'components/forms/form-radio';
 class SiteType extends Component {
 	constructor( props ) {
 		super( props );
-		this._isMounted = false;
 		this.state = {
 			siteType: props.siteType,
 		};
 	}
 
-	componentDidMount() {
-		this._isMounted = true;
-		this.formStateController = new formState.Controller( {
-			fieldNames: [ 'siteType' ],
-			validatorFunction: noop,
-			onNewState: this.setFormState,
-			hideFieldErrorsOnChange: true,
-			initialState: {
-				siteType: {
-					value: this.props.siteType,
-				},
-			},
-		} );
-		this.setFormState( this.formStateController.getInitialState() );
-	}
-
-	componentWillUnmount() {
-		this._isMounted = false;
-	}
-
-	setFormState = state => {
-		this._isMounted && this.setState( { form: state } );
-	};
-
-	handleRadioChange = event => {
-		this.formStateController.handleFieldChange( {
-			name: event.target.name,
-			value: event.target.value,
-		} );
-		this.setState( { siteType: event.target.value } );
-	};
+	handleRadioChange = event => this.setState( { siteType: event.currentTarget.value } );
 
 	handleSubmit = event => {
 		event.preventDefault();
-		const siteTypeInput = formState.getFieldValue( this.state.form, 'siteType' );
 		// Default siteType is 'blogger'
-		this.props.submitStep( siteTypeInput || 'blogger' );
+		this.props.submitStep( this.state.siteType || 'blogger' );
 	};
 
 	renderContent() {
-		const { translate, siteType } = this.props;
+		const { translate } = this.props;
 
 		return (
 			<div className="site-type__wrapper">
@@ -83,9 +49,8 @@ class SiteType extends Component {
 							<FormFieldset>
 								<FormLabel className="site-type__option">
 									<FormRadio
-										name="siteType"
 										value="blogger"
-										checked={ 'blogger' === siteType }
+										checked={ 'blogger' === this.state.siteType }
 										onChange={ this.handleRadioChange }
 									/>
 									<span>
@@ -96,9 +61,8 @@ class SiteType extends Component {
 
 								<FormLabel className="site-type__option">
 									<FormRadio
-										name="siteType"
 										value="business"
-										checked={ 'business' === siteType }
+										checked={ 'business' === this.state.siteType }
 										onChange={ this.handleRadioChange }
 									/>
 									<span>
@@ -109,9 +73,8 @@ class SiteType extends Component {
 
 								<FormLabel className="site-type__option">
 									<FormRadio
-										name="siteType"
 										value="professional"
-										checked={ 'professional' === siteType }
+										checked={ 'professional' === this.state.siteType }
 										onChange={ this.handleRadioChange }
 									/>
 									<span>
@@ -122,9 +85,8 @@ class SiteType extends Component {
 
 								<FormLabel className="site-type__option">
 									<FormRadio
-										name="siteType"
 										value="educator"
-										checked={ 'educator' === siteType }
+										checked={ 'educator' === this.state.siteType }
 										onChange={ this.handleRadioChange }
 									/>
 									<span>
@@ -135,9 +97,8 @@ class SiteType extends Component {
 
 								<FormLabel className="site-type__option">
 									<FormRadio
-										name="siteType"
 										value="non-profit"
-										checked={ 'non-profit' === siteType }
+										checked={ 'non-profit' === this.state.siteType }
 										onChange={ this.handleRadioChange }
 									/>
 									<span>
