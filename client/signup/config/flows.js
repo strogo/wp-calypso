@@ -129,8 +129,7 @@ const Flows = {
 	filterFlowName,
 	filterDestination,
 
-	/** Only for dev, revert in prod */
-	defaultFlowName: 'onboarding',
+	defaultFlowName: 'main',
 	resumingFlow: false,
 
 	/**
