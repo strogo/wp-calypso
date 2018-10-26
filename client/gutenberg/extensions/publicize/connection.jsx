@@ -13,6 +13,7 @@
 /**
  * External dependencies
  */
+import SocialLogo from 'social-logos';
 import { Component } from '@wordpress/element';
 import { FormToggle } from '@wordpress/components';
 
@@ -42,11 +43,10 @@ class PublicizeConnection extends Component {
 			<li>
 				<div className="publicize-jetpack-connection-container">
 					<label htmlFor={ label } className="jetpack-publicize-connection-label">
-						<span
-							title={ label }
-							className={
-								'jetpack-publicize-gutenberg-social-icon social-logo social-logo__' + socialName
-							}
+						<SocialLogo
+							icon={ socialName }
+							size={ 24 }
+							className="jetpack-publicize-gutenberg-social-icon"
 						/>
 						<span>{ display_name }</span>
 					</label>
