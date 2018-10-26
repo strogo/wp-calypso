@@ -14,7 +14,7 @@ import edit from './edit';
 import save from './save';
 
 registerBlockType( 'jetpack/simple-payments', {
-	title: __( 'Payment button' ),
+	title: __( 'Payment button', 'jetpack' ),
 
 	description: __(
 		'Simple Payments lets you create and embed credit and debit card payment buttons on your WordPress.com and Jetpack-enabled sites with minimal setup.',
@@ -28,6 +28,7 @@ registerBlockType( 'jetpack/simple-payments', {
 	keywords: [ __( 'simple payments' ), __( 'PayPal' ) ],
 
 	attributes: {
+		// @TODO move everything else except `paymentId` to state instead?
 		currency: {
 			type: 'string',
 			default: 'USD',
