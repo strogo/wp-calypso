@@ -224,6 +224,12 @@ const Flows = {
 		// if ( Flow.defaultFlowName === flowName ) {
 		// }
 
+		// ABTest: `signupSegmentationStep` for users in the `onboarding` flow.
+		// Check if user has already been removed.
+		if ( 'onboarding' === flowName && 'include' === abtest( 'signupSegmentationStep' ) ) {
+			return Flows.insertStepIntoFlow( 'site-type', flow, user.get() ? '' : 'user' );
+		}
+
 		return flow;
 	},
 
