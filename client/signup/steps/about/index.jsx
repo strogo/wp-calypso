@@ -23,7 +23,12 @@ import { setUserExperience } from 'state/signup/steps/user-experience/actions';
 import { getUserExperience } from 'state/signup/steps/user-experience/selectors';
 import { getSiteType } from 'state/signup/steps/site-type/selectors';
 import { recordTracksEvent } from 'state/analytics/actions';
-import { getThemeForSiteType, getThemeForSiteGoals, getSiteTypeForSiteGoals } from 'signup/utils';
+import {
+	getThemeForSiteType,
+	getThemeForSiteGoals,
+	getDesignTypeForSiteType,
+	getDesignTypeForSiteGoals,
+} from 'signup/utils';
 import { setSurvey } from 'state/signup/steps/survey/actions';
 import { getSurveyVertical } from 'state/signup/steps/survey/selectors';
 import { hints } from 'lib/signup/hint-data';
@@ -265,12 +270,8 @@ class AboutStep extends Component {
 
 		//Inputs
 		const siteTitleInput = formState.getFieldValue( this.state.form, 'siteTitle' );
-		const siteGoalsInput = formState.getFieldValue( this.state.form, 'siteGoals' );
-		const siteGoalsArray = siteGoalsInput.split( ',' );
-		const siteGoalsGroup = siteGoalsArray.sort().join();
 		const userExperienceInput = this.state.userExperience;
 		const siteTopicInput = formState.getFieldValue( this.state.form, 'siteTopic' );
-
 		const eventAttributes = {};
 
 		//Site Title
@@ -302,21 +303,35 @@ class AboutStep extends Component {
 			themeRepo = this.state.hasPrepopulatedVertical
 				? 'pub/radcliffe-2'
 				: getThemeForSiteType( siteType );
+			designType = getDesignTypeForSiteType( siteType, this.props.flowName );
+			eventAttributes.site_type = siteType;
 		} else {
+			const siteGoalsInput = formState.getFieldValue( this.state.form, 'siteGoals' );
+			const siteGoalsArray = siteGoalsInput.split( ',' );
+			const siteGoalsGroup = siteGoalsArray.sort().join();
+
 			this.props.setSiteGoals( siteGoalsInput );
 			themeRepo = this.state.hasPrepopulatedVertical
 				? 'pub/radcliffe-2'
 				: getThemeForSiteGoals( siteGoalsInput );
-			designType = getSiteTypeForSiteGoals( siteGoalsInput, this.props.flowName );
+			designType = getDesignTypeForSiteGoals( siteGoalsInput, this.props.flowName );
+
+			for ( let i = 0; i < siteGoalsArray.length; i++ ) {
+				eventAttributes[ `site_goal_${ siteGoalsArray[ i ] }` ] = true;
+			}
+
+			eventAttributes.site_goal_selections = siteGoalsGroup;
+
+			//Store
+			if ( designType === DESIGN_TYPE_STORE ) {
+				nextFlowName =
+					siteGoalsArray.indexOf( 'sell' ) === -1 && previousFlowName
+						? previousFlowName
+						: 'store-nux';
+			}
 		}
 
-		for ( let i = 0; i < siteGoalsArray.length; i++ ) {
-			eventAttributes[ `site_goal_${ siteGoalsArray[ i ] }` ] = true;
-		}
-
-		eventAttributes.site_goal_selections = siteGoalsGroup;
-
-		//SET SITETYPE
+		//SET DESIGN TYPE
 		this.props.setDesignType( designType );
 		this.props.recordTracksEvent( 'calypso_triforce_select_design', {
 			category: designType,
@@ -329,14 +344,6 @@ class AboutStep extends Component {
 		}
 
 		this.props.recordTracksEvent( 'calypso_signup_actions_user_input', eventAttributes );
-
-		//Store
-		if ( designType === DESIGN_TYPE_STORE ) {
-			nextFlowName =
-				siteGoalsArray.indexOf( 'sell' ) === -1 && previousFlowName
-					? previousFlowName
-					: 'store-nux';
-		}
 
 		//Pressable
 		if (
