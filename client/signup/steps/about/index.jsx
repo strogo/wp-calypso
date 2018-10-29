@@ -21,8 +21,9 @@ import { setSiteGoals } from 'state/signup/steps/site-goals/actions';
 import { getSiteGoals } from 'state/signup/steps/site-goals/selectors';
 import { setUserExperience } from 'state/signup/steps/user-experience/actions';
 import { getUserExperience } from 'state/signup/steps/user-experience/selectors';
+import { getSiteType } from 'state/signup/steps/site-type/selectors';
 import { recordTracksEvent } from 'state/analytics/actions';
-import { getThemeForSiteGoals, getSiteTypeForSiteGoals } from 'signup/utils';
+import { getThemeForSiteType, getThemeForSiteGoals, getSiteTypeForSiteGoals } from 'signup/utils';
 import { setSurvey } from 'state/signup/steps/survey/actions';
 import { getSurveyVertical } from 'state/signup/steps/survey/selectors';
 import { hints } from 'lib/signup/hint-data';
@@ -52,6 +53,7 @@ class AboutStep extends Component {
 		const hasPrepopulatedVertical =
 			isValidLandingPageVertical( props.siteTopic ) &&
 			props.queryObject.vertical === props.siteTopic;
+		const hideSiteGoalsField = 'onboarding' === props.flowName;
 		this.state = {
 			query: '',
 			siteTopicValue: this.props.siteTopic,
@@ -59,6 +61,7 @@ class AboutStep extends Component {
 			showStore: false,
 			pendingStoreClick: false,
 			hasPrepopulatedVertical,
+			hideSiteGoalsField,
 		};
 	}
 
@@ -252,7 +255,7 @@ class AboutStep extends Component {
 
 	handleSubmit = event => {
 		event.preventDefault();
-		const { goToNextStep, stepName, flowName, previousFlowName, translate } = this.props;
+		const { goToNextStep, stepName, flowName, previousFlowName, translate, siteType } = this.props;
 
 		//Defaults
 		let themeRepo = 'pub/radcliffe-2',
@@ -295,11 +298,17 @@ class AboutStep extends Component {
 		} );
 
 		//Site Goals
-		this.props.setSiteGoals( siteGoalsInput );
-		themeRepo = this.state.hasPrepopulatedVertical
-			? 'pub/radcliffe-2'
-			: getThemeForSiteGoals( siteGoalsInput );
-		designType = getSiteTypeForSiteGoals( siteGoalsInput, this.props.flowName );
+		if ( this.state.hideSiteGoalsField ) {
+			themeRepo = this.state.hasPrepopulatedVertical
+				? 'pub/radcliffe-2'
+				: getThemeForSiteType( siteType );
+		} else {
+			this.props.setSiteGoals( siteGoalsInput );
+			themeRepo = this.state.hasPrepopulatedVertical
+				? 'pub/radcliffe-2'
+				: getThemeForSiteGoals( siteGoalsInput );
+			designType = getSiteTypeForSiteGoals( siteGoalsInput, this.props.flowName );
+		}
 
 		for ( let i = 0; i < siteGoalsArray.length; i++ ) {
 			eventAttributes[ `site_goal_${ siteGoalsArray[ i ] }` ] = true;
@@ -588,12 +597,14 @@ class AboutStep extends Component {
 								</FormFieldset>
 							) }
 
-							<FormFieldset>
-								<FormLegend>
-									{ translate( 'What’s the primary goal you have for your site?' ) }
-								</FormLegend>
-								{ this.renderGoalCheckboxes() }
-							</FormFieldset>
+							{ ! this.state.hideSiteGoalsField && (
+								<FormFieldset>
+									<FormLegend>
+										{ translate( 'What’s the primary goal you have for your site?' ) }
+									</FormLegend>
+									{ this.renderGoalCheckboxes() }
+								</FormFieldset>
+							) }
 
 							{ this.renderExperienceOptions() }
 						</Card>
@@ -638,6 +649,7 @@ export default connect(
 		siteGoals: getSiteGoals( state ),
 		siteTopic: getSurveyVertical( state ),
 		userExperience: getUserExperience( state ),
+		siteType: getSiteType( state ),
 		isLoggedIn: isUserLoggedIn( state ),
 	} ),
 	{
