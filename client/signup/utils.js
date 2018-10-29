@@ -144,6 +144,30 @@ export function getThemeForDesignType( designType ) {
 	}
 }
 
+export function getThemeForSiteType( siteType ) {
+	if ( 'blogger' === siteType ) {
+		return 'pub/independent-publisher-2';
+	}
+
+	if ( 'business' === siteType ) {
+		return 'pub/radcliffe-2';
+	}
+
+	if ( 'professional' === siteType ) {
+		return 'pub/altofocus';
+	}
+
+	if ( 'educator' === siteType ) {
+		return 'pub/twentyfifteen';
+	}
+
+	if ( 'non-profit' === siteType ) {
+		return 'pub/karuna';
+	}
+
+	return 'pub/independent-publisher-2';
+}
+
 export function getThemeForSiteGoals( siteGoals ) {
 	const siteGoalsValue = siteGoals.split( ',' );
 
@@ -164,6 +188,29 @@ export function getThemeForSiteGoals( siteGoals ) {
 	}
 
 	return 'pub/independent-publisher-2';
+}
+
+export function getSiteType( siteGoals, flow ) {
+	const siteGoalsValue = siteGoals.split( ',' );
+
+	//Identify stores for the store signup flow
+	if ( siteGoals === 'sell' || flow === 'store-nux' ) {
+		return 'store';
+	}
+
+	if ( siteGoalsValue.indexOf( 'sell' ) !== -1 ) {
+		return 'page';
+	}
+
+	if ( siteGoalsValue.indexOf( 'promote' ) !== -1 ) {
+		return 'page';
+	}
+
+	if ( siteGoalsValue.indexOf( 'showcase' ) !== -1 ) {
+		return 'portfolio';
+	}
+
+	return 'blog';
 }
 
 export function getSiteTypeForSiteGoals( siteGoals, flow ) {
